@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Well-Being Scale Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #7c3aed;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .instructions h3 {
+            color: #7c3aed;
+            margin-bottom: 10px;
+        }
+
+        .question-block {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-block:hover {
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: #7c3aed;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .question-text {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #333;
+            flex-grow: 1;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 12px 10px;
+            text-align: center;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+            font-weight: bold;
+            transform: scale(1.05);
+        }
+
+        .radio-option label:hover {
+            background: #e8e4ff;
+            border-color: #7c3aed;
+        }
+
+        .radio-option input[type="radio"]:checked + label:hover {
+            background: #6d28d9;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results {
+            display: none;
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 30px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results h2 {
+            color: #7c3aed;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .score-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .score-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #7c3aed;
+        }
+
+        .score-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .score-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin: 15px 0;
+        }
+
+        .score-range {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .score-interpretation {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .low {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .moderate {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .high {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .retake-btn {
+            background: #6b7280;
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            transition: all 0.3s ease;
+        }
+
+        .retake-btn:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .score-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Spiritual Well-Being Scale</h1>
+            <p>Assess your spiritual, religious, and existential well-being</p>
+        </div>
+
+        <div class="content">
+            <div class="instructions">
+                <h3>Instructions</h3>
+                <p>For each of the following statements, select the choice that best indicates the extent of your agreement or disagreement as it describes your personal experience.</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 of 20 questions answered</div>
+
+            <form id="swbForm">
+                <!-- Questions will be dynamically inserted here -->
+            </form>
+
+            <button type="button" class="submit-btn" id="calculateBtn" onclick="calculateScores()" disabled>
+                Calculate My Well-Being Scores
+            </button>
+
+            <div class="results" id="results">
+                <h2>Your Well-Being Assessment Results</h2>
+                <div class="score-container">
+                    <div class="score-card">
+                        <h3>Spiritual Well-Being</h3>
+                        <div class="score-value" id="swbScore">-</div>
+                        <div class="score-range">Range: 20-120</div>
+                        <div class="score-interpretation" id="swbInterpretation">-</div>
+                    </div>
+                    <div class="score-card">
+                        <h3>Religious Well-Being</h3>
+                        <div class="score-value" id="rwbScore">-</div>
+                        <div class="score-range">Range: 10-60</div>
+                        <div class="score-interpretation" id="rwbInterpretation">-</div>
+                    </div>
+                    <div class="score-card">
+                        <h3>Existential Well-Being</h3>
+                        <div class="score-value" id="ewbScore">-</div>
+                        <div class="score-range">Range: 10-60</div>
+                        <div class="score-interpretation" id="ewbInterpretation">-</div>
+                    </div>
+                </div>
+                <button type="button" class="retake-btn" onclick="resetForm()">Take Assessment Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Questions data
+        const questions = [
+            { id: 1, text: "I don't find much satisfaction in private prayer with God.", negative: true, type: 'religious' },
+            { id: 2, text: "I don't know who I am, where I came from, or where I'm going.", negative: true, type: 'existential' },
+            { id: 3, text: "I believe that God loves me and cares about me.", negative: false, type: 'religious' },
+            { id: 4, text: "I feel that life is a positive experience.", negative: false, type: 'existential' },
+            { id: 5, text: "I believe that God is impersonal and not interested in my daily situations.", negative: true, type: 'religious' },
+            { id: 6, text: "I feel unsettled about my future.", negative: true, type: 'existential' },
+            { id: 7, text: "I have a personally meaningful relationship with God.", negative: false, type: 'religious' },
+            { id: 8, text: "I feel very fulfilled and satisfied with life.", negative: false, type: 'existential' },
+            { id: 9, text: "I don't get much personal strength and support from my God.", negative: true, type: 'religious' },
+            { id: 10, text: "I feel a sense of well-being about the direction my life is headed in.", negative: false, type: 'existential' },
+            { id: 11, text: "I believe that God is concerned about my problems.", negative: false, type: 'religious' },
+            { id: 12, text: "I don't enjoy much about life.", negative: true, type: 'existential' },
+            { id: 13, text: "I don't have a personally satisfying relationship with God.", negative: true, type: 'religious' },
+            { id: 14, text: "I feel good about my future.", negative: false, type: 'existential' },
+            { id: 15, text: "My relationship with God helps me not to feel lonely.", negative: false, type: 'religious' },
+            { id: 16, text: "I feel that life is full of conflict and unhappiness.", negative: true, type: 'existential' },
+            { id: 17, text: "I feel most fulfilled when I'm in close communion with God.", negative: false, type: 'religious' },
+            { id: 18, text: "Life doesn't have much meaning.", negative: true, type: 'existential' },
+            { id: 19, text: "My relation with God contributes to my sense of well-being.", negative: false, type: 'religious' },
+            { id: 20, text: "I believe there is some real purpose for my life.", negative: false, type: 'existential' }
+        ];
+
+        const options = [
+            { value: 'SA', label: 'Strongly Agree', abbr: 'SA' },
+            { value: 'MA', label: 'Moderately Agree', abbr: 'MA' },
+            { value: 'A', label: 'Agree', abbr: 'A' },
+            { value: 'D', label: 'Disagree', abbr: 'D' },
+            { value: 'MD', label: 'Moderately Disagree', abbr: 'MD' },
+            { value: 'SD', label: 'Strongly Disagree', abbr: 'SD' }
+        ];
+
+        // Initialize the form
+        function initializeForm() {
+            const form = document.getElementById('swbForm');
+            
+            questions.forEach(question => {
+                const questionBlock = document.createElement('div');
+                questionBlock.className = 'question-block';
+                
+                let optionsHTML = '';
+                options.forEach(option => {
+                    optionsHTML += `
+                        <div class="radio-option">
+                            <input type="radio" id="q${question.id}_${option.value}" 
+                                   name="q${question.id}" value="${option.value}" 
+                                   onchange="updateProgress()">
+                            <label for="q${question.id}_${option.value}" title="${option.label}">
+                                ${option.abbr}
+                            </label>
+                        </div>
+                    `;
+                });
+                
+                questionBlock.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">${question.id}</div>
+                        <div class="question-text">${question.text}</div>
+                    </div>
+                    <div class="options-container">
+                        ${optionsHTML}
+                    </div>
+                `;
+                
+                form.appendChild(questionBlock);
+            });
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            let answered = 0;
+            questions.forEach(q => {
+                const radios = document.getElementsByName(`q${q.id}`);
+                if (Array.from(radios).some(r => r.checked)) {
+                    answered++;
+                }
+            });
+            
+            const percentage = (answered / questions.length) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${answered} of ${questions.length} questions answered`;
+            
+            // Enable submit button when all questions are answered
+            document.getElementById('calculateBtn').disabled = answered < questions.length;
+        }
+
+        // Calculate scores
+        function calculateScores() {
+            let swbScore = 0;
+            let rwbScore = 0;
+            let ewbScore = 0;
+            
+            questions.forEach(question => {
+                const radios = document.getElementsByName(`q${question.id}`);
+                const selected = Array.from(radios).find(r => r.checked);
+                
+                if (selected) {
+                    let score = getScore(selected.value, question.negative);
+                    swbScore += score;
+                    
+                    if (question.type === 'religious') {
+                        rwbScore += score;
+                    } else {
+                        ewbScore += score;
+                    }
+                }
+            });
+            
+            displayResults(swbScore, rwbScore, ewbScore);
+        }
+
+        // Get score for an answer
+        function getScore(answer, isNegative) {
+            const positiveScoring = {
+                'SA': 6, 'MA': 5, 'A': 4, 'D': 3, 'MD': 2, 'SD': 1
+            };
+            const negativeScoring = {
+                'SA': 1, 'MA': 2, 'A': 3, 'D': 4, 'MD': 5, 'SD': 6
+            };
+            
+            return isNegative ? negativeScoring[answer] : positiveScoring[answer];
+        }
+
+        // Display results
+        function displayResults(swb, rwb, ewb) {
+            // Update scores
+            document.getElementById('swbScore').textContent = swb;
+            document.getElementById('rwbScore').textContent = rwb;
+            document.getElementById('ewbScore').textContent = ewb;
+            
+            // Update interpretations
+            document.getElementById('swbInterpretation').textContent = interpretSWB(swb);
+            document.getElementById('swbInterpretation').className = 'score-interpretation ' + getScoreClass(swb, 40, 99);
+            
+            document.getElementById('rwbInterpretation').textContent = interpretRWB(rwb);
+            document.getElementById('rwbInterpretation').className = 'score-interpretation ' + getScoreClass(rwb, 20, 49);
+            
+            document.getElementById('ewbInterpretation').textContent = interpretEWB(ewb);
+            document.getElementById('ewbInterpretation').className = 'score-interpretation ' + getScoreClass(ewb, 20, 49);
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Interpretation functions
+        function interpretSWB(score) {
+            if (score <= 40) return 'Low spiritual well-being';
+            if (score <= 99) return 'Moderate spiritual well-being';
+            return 'High spiritual well-being';
+        }
+
+        function interpretRWB(score) {
+            if (score <= 20) return 'Unsatisfactory relationship with God';
+            if (score <= 49) return 'Moderate religious well-being';
+            return 'Positive relationship with God';
+        }
+
+        function interpretEWB(score) {
+            if (score <= 20) return 'Low life satisfaction';
+            if (score <= 49) return 'Moderate life satisfaction';
+            return 'High life satisfaction';
+        }
+
+        function getScoreClass(score, lowThreshold, moderateThreshold) {
+            if (score <= lowThreshold) return 'low';
+            if (score <= moderateThreshold) return 'moderate';
+            return 'high';
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('swbForm').reset();
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressText').textContent = '0 of 20 questions answered';
+            document.getElementById('calculateBtn').disabled = true;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            initializeForm();
+        };
+    </script>
+</body>
+</html>
